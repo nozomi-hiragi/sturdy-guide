@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  FrontNginx:
+    image: nginx:latest
+    container_name: FrontNginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/ssl/certs/dhparam.pem:/etc/ssl/certs/dhparam.pem
+      - ./preferences/nginx.conf:/etc/nginx/nginx.conf
+      - ./preferences/conf.d:/etc/nginx/conf.d
+      - ./bypass/letsencrypt:/etc/letsencrypt
+      - ./bypass/html:/var/www/html
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./bypass/letsencrypt:/etc/letsencrypt
+      - ./bypass/html:/var/www/html
